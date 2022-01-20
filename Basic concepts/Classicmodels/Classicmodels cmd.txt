@@ -1,0 +1,49 @@
+select 
+   orderNumber, orderDate,
+   requiredDate, shippedDate, status, customerNumber
+from orders;
+
+SELECT status
+FROM orders
+GROUP BY status;
+
+SELECT status, COUNT(*)
+FROM orders
+GROUP BY status;
+
+SELECT
+     status,
+     SUM(quantityOrdered * priceEach) as Amount
+FROM
+    orders
+INNER JOIN orderdetails
+  USING (orderNumber)
+GROUP BY status;
+
+SELECT YEAR(orderDate) as Year FROM orders;  //SHOWS YEAR ONLY
+
+SELECT
+    YEAR(orderDate) as Year,
+    SUM(quantityOrdered * priceEach) as Amount
+FROM
+    orders
+INNER JOIN orderdetails
+  USING (orderNumber)
+WHERE
+    status = 'Shipped'
+GROUP BY 
+     YEAR(orderDate);
+
+SELECT
+    YEAR(orderDate) as Year,
+    SUM(quantityOrdered * priceEach) as Amount
+FROM
+    orders
+INNER JOIN orderdetails
+  USING (orderNumber)
+WHERE
+    status = 'Shipped'
+GROUP BY 
+     YEAR(orderDate)
+HAVING 
+    YEAR = '2003';

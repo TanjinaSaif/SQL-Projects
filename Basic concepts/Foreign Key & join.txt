@@ -1,0 +1,270 @@
+CSE- 212 : Database Systems Lab
+B2
+Lab-7 data set
+Fahad Ahmed
+•
+11:12 AM (Edited 11:53 AM)
+create table student(
+    id int (6) PRIMARY KEY,
+    firstname varchar (20) not null,
+   lastname varchar (20),
+   city varchar (20),
+    session int (5),
+   cgpa numeric (4,2));
+
+insert into student values(1001,'Fahad','Ahmed','Naogaon',2020,3.75);
+insert into student values(1002,'Ar','Rahman','chittagong',2018,3.15);
+insert into student values(1003,'ocean','ahmed','naogaoon',2017,3.28);
+insert into student values(1004,'farrukh','ahmed','natore',2019,3.5);
+insert into student values(1006,'farrukh','ahmed','natore',2017,2.75);
+insert into student values(1005,'abdul','hakim','chittagong',2019,3.88);
+insert into student values(1003,'ocean','ahmed','naogaoon',2017,3.28);
+insert into student values(1010,'Rima','Aktar','Tangail',2019,3.76);
+insert into student values(1011,'Salma','Aktar','Tangail',2017,2.75);
+
+lab-07 command.txt
+Text
+Class comments
+
+
+
+select * from student where lastname like 'A%'and cgpa between 2.05 and 3.88 order by cgpa desc limit 1;
+
+
+CREATE TABLE Persons (
+    ID int NOT NULL,    
+    name varchar(255),
+    Age int,
+    City varchar(255),
+    CONSTRAINT CHK_Person CHECK (Age>=18)
+);
+insert into persons values(1,'Islam',25,'Dhaka');
+insert into persons values(2,'Selim',12,'Dhaka');
+
+ALTER TABLE Persons ALTER CHECK CHK_Person NOT ENFORCED;
+
+ALTER TABLE Persons ALTER CHECK CHK_Person ENFORCED;
+
+SELECT * FROM INFORMATION_SCHEMA.CHECK_CONSTRAINTS;
+
+ALTER TABLE Persons DROP CHECK CHK_Person;
+
+
+
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS products;
+
+CREATE DATABASE fkdemo2;
+ 
+USE fkdemo2;
+
+CREATE TABLE categories(
+    categoryId INT AUTO_INCREMENT PRIMARY KEY,
+    categoryName VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE products(
+    productId INT AUTO_INCREMENT PRIMARY KEY,
+    productName varchar(100) not null,
+    categoryId INT,
+    CONSTRAINT fk_category
+    FOREIGN KEY (categoryId) 
+        REFERENCES categories(categoryId)
+);
+
+
+INSERT INTO categories(categoryName) VALUES    ('Smartphone'),    ('Smartwatch');
+
+SELECT * FROM categories;
+
+INSERT INTO products(productName, categoryId)
+VALUES
+    ('iPhone', 1), 
+    ('Galaxy Note',1),
+    ('Apple Watch',2),
+    ('Samsung Galary Watch',2);;
+
+SELECT * from products;
+
+ALTER TABLE products 
+DROP FOREIGN KEY fk_category;
+
+
+alter table products 
+add constraint fk_category
+foreign key (categoryId)
+references categories (categoryId)
+on delete cascade;
+
+
+
+
+alter table products 
+add constraint fk_category
+foreign key (categoryId)
+references categories (categoryId)
+on delete cascade
+ON UPDATE cascade;
+
+
+
+SELECT * from categories;
+SELECT * from products;
+
+UPDATE categories
+SET categoryId = 100
+WHERE categoryId = 1;
+
+DELETE FROM categories 
+WHERE categoryId = 2;
+
+SHOW CREATE TABLE products;
+
+
+
+SELECT 
+    m.member_id, 
+    m.name member
+FROM
+    members m
+LEFT JOIN committees c USING(name)
+WHERE c.committee_id IS NULL;
+
+
+SELECT 
+    c.committee_id, 
+    c.name committee
+FROM
+    members m
+RIGHT JOIN committees c USING(name)
+WHERE m.member_id IS NULL;
+
+****LAB 08*****
+
+CREATE TABLE members (
+    member_id INT AUTO_INCREMENT,
+    name VARCHAR(100),
+    PRIMARY KEY (member_id)
+);
+ 
+CREATE TABLE committees (
+    committee_id INT AUTO_INCREMENT,
+    name VARCHAR(100),
+    PRIMARY KEY (committee_id)
+);
+
+
+INSERT INTO members(name)
+VALUES('John'),('Jane'),('Mary'),('David'),('Amelia');
+ 
+INSERT INTO committees(name)
+VALUES('John'),('Mary'),('Amelia'),('Joe'); 
+
+
+SELECT 
+    members.member_id,
+    members.name, 
+    committees.committee_id,   
+    committees.name
+FROM
+    members 
+      INNER JOIN committees
+	ON members.name = committees.name;
+
+SELECT 
+    members.member_id,
+    members.name, 
+    committees.committee_id,   
+    committees.name
+FROM
+    members 
+      LEFT JOIN committees USING(name);
+
+SELECT 
+    members.member_id,
+    members.name, 
+    committees.committee_id,   
+    committees.name
+FROM
+    members 
+      LEFT JOIN committees USING(name)
+          WHERE committees.committee_id is NULL; 
+
+SELECT 
+    members.member_id,
+    members.name 
+FROM
+    members 
+      LEFT JOIN committees USING(name)
+          WHERE committees.committee_id is NULL; 
+
+
+
+SELECT 
+    members.member_id,
+    members.name, 
+    committees.committee_id,   
+    committees.name
+FROM
+    members 
+      INNER JOIN committees
+	ON members.name = committees.name;
+
+SELECT 
+    members.member_id,
+    members.name, 
+    committees.committee_id,   
+    committees.name
+FROM
+    members 
+      LEFT JOIN committees USING(name);
+
+SELECT 
+    members.member_id,
+    members.name, 
+    committees.committee_id,   
+    committees.name
+FROM
+    members 
+      LEFT JOIN committees USING(name)
+          WHERE committees.committee_id is NULL; 
+
+SELECT 
+    members.member_id,
+    members.name,
+    committees.committee_id,   
+    committees.name
+FROM
+    members 
+      RIGHT JOIN committees USING(name);
+
+SELECT 
+    committees.committee_id,   
+    committees.name
+FROM
+    members 
+      RIGHT JOIN committees USING(name)
+      WHERE members.member_id IS NULL;
+
+SELECT 
+    members.member_id,
+    members.name,
+    committees.committee_id,   
+    committees.name
+FROM
+    members 
+      CROSS JOIN committees;
+     
+*******UNION************
+
+SELECT name FROM members
+UNION 
+
+SELECT
+  department_name,
+  avg(salary),
+  count(employee_id)
+FROM
+   departments JOIN employees USING(department_id)
+GROUP BY department_name;
+
